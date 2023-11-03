@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <style>
+        .wrapper {
+            height: 100vh;
+        }
+
+        .height {
+            height: 100vh;
+        }
+
+        .item {
+            padding-right: 20px;
+        }
+
+        .navbar {
+            margin-bottom: 20px;
+        }
+
+        .p-0 {
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper d-flex flex-column">
+    <header>
+        <nav class="navbar navbar-expand navbar-dark bg-dark" aria-label="Second navbar example">
+            <div class="container-fluid jc-center justify-content-center">
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav me-auto d-flex align-items-center">
+                        <li class="text-white me-auto item">
+                            <strong class="navbar__user text-white">
+                            </strong>
+                        </li>
+                        <li class="nav-item text-white item">
+                            with roles:
+                        </li>
+                        <li class="navbar__role nav-item text-white item">
+                        </li>
+                    </ul>
+                    <form th:action="@{/logout}" th:method="POST">
+                        <input class="btn btn-dark text-white" th:type="submit" th:value="Logout"/>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="items container-fluid align-items-stretch height">
+        <div class="row">
+
+            <!--Sidebar-->
+            <div class="col-2 px-0">
+                <div class="d-flex flex-column flex-shrink-0 bg-light p-0" style="">
+                    <ul class="nav nav-pills flex-column mb-auto  p-0">
+                        <li class="nav-item  p-0 text-light">
+                            <a href="#" class="nav-link link-dark active text-light">
+                                User
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-10 bg-light p-3 height">
+                <h1>User information-page</h1>
+                <div class="container-fluid">
+                    <div class="row border">
+                        <h5 class="m-2">About user</h5>
+                    </div>
+                    <div class="row border bg-white pb-3">
+                        <table class="table table-borderless m-3 flex-shrink-1">
+                            <thead>
+                            <tr class="border-top">
+                                <th scope="col">ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Surname</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Role</th>
+                            </tr>
+                            </thead>
+                            <tbody class="user-container">
+<!--                            <tr class="border-top bg-light" th:object="${user}">-->
+<!--                                <td class="bg-light" th:text="${user.getId()}">UserName</td>-->
+<!--                                <td class="bg-light" th:text="${user.getName()}">UserName</td>-->
+<!--                                <td class="bg-light" th:text="${user.getSurname()}">UserName</td>-->
+<!--                                <td class="bg-light" th:text="${user.getEmail()}">Email</td>-->
+<!--                                 <td class="d-flex">-->
+<!--                                    <p class="bg-light" th:each="role : ${user.getRole()}">-->
+<!--                                        <span th:text="${role.getName().replace('ROLE_', ' ')}" style="margin-right: 5px"></span>-->
+<!--                                    </p>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<script type="text/javascript" src="user.js"></script>-->
+<!--<script type="text/javascript" src="registration.js"></script>-->
+</body>
+</html>
