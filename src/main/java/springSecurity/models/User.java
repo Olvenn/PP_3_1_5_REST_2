@@ -1,5 +1,6 @@
 package springSecurity.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -20,60 +21,33 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name")
+
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "surname")
+    @Column(name = "surname", nullable = false)
     private String surname;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
 
     @Email
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
-
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "users_roles",
-//            joinColumns = @JoinColumn(name = "users_id"),
-//            inverseJoinColumns = @JoinColumn(name = "roles_id"))
-//    private Set<Role> roles;
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn (nullable = false, name = "user_id"),
-            inverseJoinColumns = @JoinColumn (nullable = false, name = "role_id"))
-    private Set<Role> roles;
-
-//    Set<Role> roles = new HashSet<>();
-
-//    @ManyToMany(cascade = {CascadeType.MERGE},  fetch = FetchType.EAGER)
+    @JsonIgnore
+//    @JsonBackReference
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
 //    @Fetch(FetchMode.JOIN)
-//    @JsonIgnore
-//    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-//    private Set<Role> ;
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+    private Set<Role> roles;
 
     @Column(name = "password")
     private String password;
 
     public User() {
-    }
-
-    public User(String name, String surname, String username, String email, String password) {
-        this.name = name;
-        this.surname = surname;
-        this.username = username;
-        this.email = email;
-        this.password = password;
     }
 
     public User(long id, String name, String surname, String username, String email, String password) {
@@ -84,7 +58,6 @@ public class User {
         this.email = email;
         this.password = password;
     }
-
 
     public long getId() {
         return id;
@@ -126,6 +99,14 @@ public class User {
         this.email = email;
     }
 
+    public Set<Role> getRole() {
+        return roles;
+    }
+
+    public void setRole(Set<Role> roles) {
+
+        this.roles = roles;
+    }
 
     public String getPassword() {
         return password;

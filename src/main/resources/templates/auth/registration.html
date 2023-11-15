@@ -68,24 +68,25 @@
 <div class="wrapper d-flex flex-column">
     <header>
         <nav class="navbar navbar-expand navbar-dark bg-dark" aria-label="Second navbar example">
-            <div class="container-fluid jc-center justify-content-center">
-                <div class="collapse navbar-collapse">
-                    <ul class="me-auto d-flex align-items-center">
-
-                        <li class="text-white me-auto item">
-                            <strong class="navbar__user text-white">
-                            </strong>
-                        </li>
-                        <li class="nav-item text-white item">
-                            with roles:
-                        </li>
-                        <li class="navbar__role nav-item text-white item">
-                        </li>
-                    </ul>
-                    <form th:action="@{/logout}" th:method="POST">
-                        <input class="btn btn-dark text-white" th:type="submit" th:value="Logout"/>
-                    </form>
-                </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-left me-auto d-flex align-items-center">
+                    <li class="text-white me-auto item">
+                        <strong class="text-white" th:utext="${admin.getName()}">
+                            Username
+                        </strong>
+                    </li>
+                    <li class="nav-item text-white item">
+                        with roles:
+                    </li>
+                    <li class="nav-item text-white item" th:each="role : ${admin.getRole()}">
+                        <div th:text="*{role.getName().replace('ROLE_', ' ')}">
+                            Role
+                        </div>
+                    </li>
+                </ul>
+                <form th:action="@{/logout}" th:method="POST">
+                    <input class="btn btn-dark text-white" th:type="submit" th:value="Logout"/>
+                </form>
             </div>
         </nav>
     </header>
@@ -132,43 +133,53 @@
                         <h5 class="m-2">Add new user</h5>
                     </div>
                     <div class="form_cover bg-white">
-                        <form class="form-group form-registration mx-auto col-lg-4 text-center" method="post" enctype="multipart/form-data" autocomplete="off">
+                        <form class="form-group form-registration mx-auto col-lg-4 text-center" th:method="POST"
+                              th:action="@{/auth/registration}" th:object="${user}">
                             <div class="form-group mb-3">
                                 <label for="username">Enter login:</label>
-                                <input class="form-control" name="username" type="text" id="username"/>
+                                <input class="form-control" type="text" th:field="*{username}" id="username"/>
+                                <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
+                                    Login
+                                </div>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="password">Enter password:</label>
-                                <input class="form-control" name="password"  type="text" id="password"/>
+                                <input class="form-control" type="text" th:field="*{password}" id="password"/>
+                                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                                    Password Error
+                                </div>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="name">Enter name: </label>
-                                <input class="form-control" name="name" type="text" id="name"/>
+                                <input class="form-control" type="text" th:field="*{name}" id="name"/>
+                                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name
+                                    Error
+                                </div>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="surname">Enter surname: </label>
-                                <input class="form-control" name="surname" type="text" id="surname"/>
+                                <input class="form-control" type="text" th:field="*{surname}" id="surname"/>
                             </div>
 
                             <div class="form-group mb-3">
                                 <label for="email">Enter e-mail:</label>
-                                <input class="form-control" name="email" type="text" id="email"/>
+                                <input class="form-control" type="text" th:field="*{email}" id="email"/>
+                                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email
+                                    Error
+                                </div>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="role">Role</label>
                                 <div>
-                                    <select multiple class="custom-select" size="2"
+                                    <select th:field="*{role}" multiple class="custom-select" size="2"
                                             id="role" name="role" required>
-                                        <option>
-                                            ADMIN
-                                        </option>
-                                        <option>
-                                            USER
+                                        <option th:each="role : ${roles}" th:value="${role.id}"
+                                                th:text="${role.name}" th:selected="${role.name.equals(roleDefault)}">
                                         </option>
                                     </select>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-new btn-success">Add new user</button>
+                            <button type="submit" class="btn btn-success">Add new user</button>
                         </form>
                     </div>
                 </div>
@@ -176,7 +187,6 @@
         </div>
     </div>
 </div>
-<!--<script type="text/javascript" src="../registration.js"></script>-->
 </body>
 </html>
 

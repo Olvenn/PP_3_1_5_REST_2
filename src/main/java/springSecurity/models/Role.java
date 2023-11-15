@@ -2,12 +2,12 @@ package springSecurity.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -19,21 +19,12 @@ public class Role implements GrantedAuthority {
     @Column(name = "name")
     private String name;
 
-    @Transient
+    @JsonIgnore
+//@JsonManagedReference
     @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
-//    @ManyToMany(mappedBy = "roles")
-//    private Collection<User> users;
+    private Collection<User> users;
 
     public Role() {
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
     }
 
     public Role(String roleName) {
@@ -65,6 +56,13 @@ public class Role implements GrantedAuthority {
         this.id = id;
     }
 
+    public Collection<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Collection<User> users) {
+        this.users = users;
+    }
 
     @Override
     public String toString() {

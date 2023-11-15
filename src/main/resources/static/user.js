@@ -24,7 +24,6 @@ function createUserTemplate(user) {
     userContainer.innerHTML = result;
 }
 
-
 const createUserItem = (user) => (
     `<tr class="border-top bg-light"">
             <td class="bg-light">${user.id}</td>
@@ -34,8 +33,6 @@ const createUserItem = (user) => (
             <td class="d-flex bg-light">${user.role.map(role => createRoleItem(role)).join(' ')}</td>
          </tr>`
 );
-
-
 
 const createRoleItem = (role) => (
     `<span style="margin-right: 5px">${role.name.replace('ROLE_', '')}</span>`

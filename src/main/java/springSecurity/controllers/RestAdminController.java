@@ -25,19 +25,34 @@ public class RestAdminController {
         this.roleService = roleService;
     }
 
-    @GetMapping("/users")
-    public ResponseEntity<List<ResponseEntity>> showAllUsers(Principal principal) {
-        User user = userService.findByUsername(principal.getName());
+//    @GetMapping("/all")
+//    public List<User> showUsers() {
+//
+//        List<User> users = userService.findAllUsers();
+//
+//        return users;
+//    }
+
+    @GetMapping()
+    public ResponseEntity<List<User>> showUsers() {
         List<User> users = userService.findAllUsers();
-        List<Role> roles = roleService.getRoles();
-
-        ResponseEntity userEntity = new ResponseEntity<>(user, HttpStatus.OK);
-        ResponseEntity usersEntity = new ResponseEntity<>(users, HttpStatus.OK);
-        ResponseEntity rolesEntity = new ResponseEntity<>(roles, HttpStatus.OK);
-        List<ResponseEntity> entities = Arrays.asList(userEntity, usersEntity, rolesEntity);
-
-        return new ResponseEntity<>(entities, HttpStatus.OK);
+        System.out.println(users);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
+//    @GetMapping("/users")
+//    public ResponseEntity<List<ResponseEntity>> showAllUsers(Principal principal) {
+//        User user = userService.findByUsername(principal.getName());
+//        List<User> users = userService.findAllUsers();
+//        List<Role> roles = roleService.getRoles();
+//
+//        ResponseEntity userEntity = new ResponseEntity<>(user, HttpStatus.OK);
+//        ResponseEntity usersEntity = new ResponseEntity<>(users, HttpStatus.OK);
+//        ResponseEntity rolesEntity = new ResponseEntity<>(roles, HttpStatus.OK);
+//        List<ResponseEntity> entities = Arrays.asList(userEntity, usersEntity, rolesEntity);
+//
+//        return new ResponseEntity<>(entities, HttpStatus.OK);
+//    }
 
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getOneUser(@PathVariable("id") Long id) {
@@ -45,15 +60,35 @@ public class RestAdminController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PutMapping("/users")
+    @PutMapping("/users/{id}")
     public ResponseEntity<User> editUser(@RequestBody User user) {
         userService.updateUser(user.getId(), user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+//
+//    @DeleteMapping("/del/{id}")
+//    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id) {
+//        userService.deleteUser(id);
+//        return ResponseEntity.ok().build();
+//    }
 
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id) {
+//    @DeleteMapping("/del/{id}")
+//    public ResponseEntity<User> restDelete(@RequestBody User user, Principal principal) {
+//        if (!(principal.getName().equals(user.getUsername()))) {
+//            userService.deleteUser(user.getId());
+//        }
+//        return ResponseEntity.ok(user);
+//    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable int id) throws Exception {
+        User user = userService.findOneUser(id);
+        if(user == null) {
+            throw new Exception("There is no user with id = " + id + " in database.");
+        }
+
         userService.deleteUser(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("User with id = " + id + " was deleted.");
     }
 }
+

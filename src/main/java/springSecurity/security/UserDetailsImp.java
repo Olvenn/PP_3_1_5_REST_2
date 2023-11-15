@@ -17,7 +17,7 @@ public class UserDetailsImp implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // TODO: return roles(or authorities) on the user ROLE_ADMIN or ROLE_USER
-        return (Collection<? extends GrantedAuthority>) this.person.getRoles();
+        return (Collection<? extends GrantedAuthority>) this.person.getRole();
     }
 
     @Override

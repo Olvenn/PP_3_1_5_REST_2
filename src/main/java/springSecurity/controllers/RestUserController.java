@@ -1,5 +1,4 @@
 package springSecurity.controllers;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,18 +13,18 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/api")
-public class RestUsersController {
-
+public class RestUserController {
     private UserServiceImp userService;
 
     @Autowired
-    public RestUsersController(UserServiceImp userService) {
+    public RestUserController(UserServiceImp userService) {
 
         this.userService = userService;
     }
 
     @GetMapping("/user")
     public ResponseEntity<User> showUser(Principal principal) {
+//        System.out.println(userService.findByUsername(principal.getName()));
 
         return new ResponseEntity<>(userService.findByUsername(principal.getName()), HttpStatus.OK);
     }

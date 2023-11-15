@@ -24,25 +24,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     protected void configure(HttpSecurity http) throws Exception {
-
-        http.authorizeRequests()
-                .antMatchers("/static/**").permitAll()
-                .antMatchers("/api/users/**").hasAnyRole("ADMIN", "USER")
-                .antMatchers("/api/registration").permitAll()
-                .antMatchers("/auth/admin").hasRole("ADMIN")
-                .antMatchers("/auth/login", "/auth/registration", "/auth/admin","/error").permitAll()
-                .antMatchers("/auth/user/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/auth/registration").hasAnyRole("USER", "ADMIN")
-                .anyRequest().hasAnyRole("USER", "ADMIN")
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/", "/index").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user").hasAnyRole("USER","ADMIN")
+                .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/auth/login")
-                .loginProcessingUrl("/process_login")
-                .successHandler(successUserHandler)
-                .failureUrl("/auth/login?error")
+                .formLogin().successHandler(successUserHandler)
+                .permitAll()
                 .and()
-                .logout().logoutUrl("/logout")
-                .logoutSuccessUrl("/auth/login");
+                .logout()
+                .permitAll();
+//        http.authorizeRequests()
+//                .antMatchers("/api/user", "/api/all").hasAnyRole("ADMIN", "USER")
+//                .antMatchers("/admin/**").hasRole("ADMIN")
+//                .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
+//                .antMatchers("/user").hasAnyRole("USER", "ADMIN")
+//                .anyRequest().hasAnyRole("USER", "ADMIN")
+//                .and()
+//                .formLogin()
+//                .loginPage("/auth/login")
+//                .loginProcessingUrl("/process_login")
+//                .successHandler(successUserHandler)
+//                .failureUrl("/auth/login?error")
+//                .and()
+//                .logout().logoutUrl("/logout")
+//                .logoutSuccessUrl("/auth/login");
     }
 
     @Override

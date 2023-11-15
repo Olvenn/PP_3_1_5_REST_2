@@ -18,23 +18,69 @@ import java.security.Principal;
 @RequestMapping("/admin")
 
 public class AdminController {
+    private UserServiceImp userService;
+    private final UserValidator userValidator;
+    private final UserValidator UsersDetailsService;
+    private final RoleServiceImpl roleService;
 
-    @GetMapping("/registration")
-    public String showRegistrationPage() {
-        return "auth/registration";
+
+    @Autowired
+    public AdminController(UserServiceImp userService, UserValidator userValidator, UserValidator usersDetailsService, RoleServiceImpl roleService) {
+
+        this.userService = userService;
+        this.userValidator = userValidator;
+        this.UsersDetailsService = usersDetailsService;
+        this.roleService = roleService;
     }
-    @GetMapping()
-    public String showUser() {
+
+    @GetMapping("/{id}")
+    public String showUser(@PathVariable("id") long id, ModelMap model) {
+        model.addAttribute("user", userService.findOneUser(id));
         return "users/user";
     }
 
+
+//    @GetMapping("/user")
+//    public String showUser(Model model, Principal principal) {
+//        model.addAttribute("user", userService.findByUsername(principal.getName()));
+//        return "users/user";
+//    }
+
     @GetMapping("/{id}/edit")
-    public String showUpdateUserForm(@PathVariable String id) {
-        return "auth/admin";
+    public String showUpdateUserForm(Model model, Principal principal, @PathVariable("id") long id) {
+        model.addAttribute("user", userService.findByUsername(principal.getName()));
+        model.addAttribute("user", userService.findOneUser(id));
+        return "users/editUser";
     }
 
+    @PatchMapping("/{id}")
+    public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                             @PathVariable("id") long id) {
+        if (bindingResult.hasErrors())
+            return "users/editUser";
+
+        userService.updateUser(id, user);
+        return "redirect:/user";
+    }
+
+//    @DeleteMapping("/{id}")
+//    public String deleteUser(@PathVariable("id") long id) {
+//        userService.deleteUser(id);
+//        return "redirect:/user";
+//    }
+
+
+    @GetMapping("/user")
+    public String showAdmin(Principal principal) {
+        return "users/user";
+    }
+
+
     @GetMapping()
-    public String showAdminPage() {
+    public String showAdminPage(ModelMap model, Principal principal) {
+//        model.addAttribute("users", userService.findAllUsers());
+        model.addAttribute("admin", userService.findByUsername(principal.getName()));
+//        model.addAttribute("roles", roleService.getRoles());
         return "auth/admin";
     }
 }
